@@ -1,0 +1,28 @@
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Generated artefacts (rebuilt from PDFs by document_processor.py + ingest.py)
+data/
+vectorstores/
+temp_uploads/
+
+# PDFs (don't commit binary docs to repo — keep them locally)
+# pdfs/*
+!pdfs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# OS
+.DS_Store
