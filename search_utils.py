@@ -28,11 +28,11 @@ class ChromaVectorStore:
 
     def load(self):
         self.chroma_path.mkdir(parents=True, exist_ok=True)
-        self.client = chromadb.PersistentClient(path=str(self.chroma_path))
+        self.client = chromadb.PersistentClient(path=str(self.chroma_path))#Initialize Chroma DB,Creates/loads a local Chroma database.
         self.collection = self.client.get_or_create_collection(
             name=CHROMA_COLLECTION,
             metadata={"hnsw:space": "cosine"},
-        )
+        )#Creates a vector collection.,Creates a vector collection.
         count = self.collection.count()
         if count > 0:
             logger.info(f"Loaded Chroma collection with {count} vectors")
@@ -50,7 +50,7 @@ class ChromaVectorStore:
             embeddings=embeddings.tolist(),
             documents=documents,
             metadatas=metadatas,
-        )
+        )#Store Embeddings
         logger.info(f"Added {len(ids)} vectors to Chroma at {self.chroma_path}")
 
     def search(self, query_vector: List[float], top_k: int):
@@ -58,7 +58,7 @@ class ChromaVectorStore:
             query_embeddings=[query_vector],
             n_results=top_k,
             include=["documents", "metadatas", "distances"],
-        )
+        )#Search by Vector
 
         output = []
         for doc, meta, dist in zip(
@@ -93,14 +93,14 @@ class BM25Store:
     def save(self):
         self.metadata_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.metadata_path, "wb") as f:
-            pickle.dump(self.metadata, f)
+            pickle.dump(self.metadata, f)#Stores BM25 object to disk.
         with open(self.bm25_index_path, "wb") as f:
-            pickle.dump(self.bm25, f)
+            pickle.dump(self.bm25, f)#Stores BM25 object to disk.
         logger.info(f"Saved BM25 index to {self.bm25_index_path}")
 
     def create_from_texts(self, texts: List[str], metadata: pd.DataFrame):
-        tokenized_corpus = [text.lower().split() for text in texts]
-        self.bm25 = BM25Okapi(tokenized_corpus)
+        tokenized_corpus = [text.lower().split() for text in texts]#Tokenize text
+        self.bm25 = BM25Okapi(tokenized_corpus)#Build BM25 Index
         self.metadata = metadata.to_dict("records")
         self.save()
 

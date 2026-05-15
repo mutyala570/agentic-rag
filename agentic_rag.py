@@ -34,7 +34,7 @@ class AgenticRAG:
     def _perform_search(self, state: MessagesState):
         """Always perform search as the first step for any query."""
         last_msg = state["messages"][-1]
-        if hasattr(last_msg, 'content'):
+        if hasattr(last_msg, 'content'):# return true or false hasattr is a built-in function in Python that checks if an object has a specific attribute. In this case, it checks if the last message in the state has a 'content' attribute. If it does, it retrieves the content directly; otherwise, it tries to get the content using the get method, which is common for dictionaries. This allows the code to handle both cases where messages might be objects with attributes or dictionaries with keys.
             user_query = last_msg.content
         else:
             user_query = last_msg.get("content", "")
